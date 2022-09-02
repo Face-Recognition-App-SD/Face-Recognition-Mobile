@@ -79,3 +79,20 @@ virtualenv
 
 awsebcli
 
+
+# Useful Command Line commands 
+
+## 1. IMPORTANT: Please be sure you are in your virtual env and have installed EB Per above instructions. Otherwise eb commands wont work
+## 2. These are instructions for windows. Mac users please add yours here!
+* **pip freeze**
+  * This lets you see all the libraries that are currently loaded in your virtual env.  This is a good debug tool.
+* **App modifictions**
+  * Run the below lines each time make modification to app.  these will ensure the changes are loaded ono the all
+  * python manage.py migrate
+  * python manage.py makemigrations
+  * python manage.py makemigrations Facial_Recognition_App
+  * python manage.py migrate --run-syncdb
+* **eb deploy**
+  * This will deploy the app on to AWS EB server (This will take a couple of mins.
+* **eb open**
+  * This will launch the app on your web.
