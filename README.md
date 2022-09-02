@@ -54,3 +54,28 @@ For most use cases you can execute the `ebcli_installer.py` script with no argum
 ```
 python ./aws-elastic-beanstalk-cli-setup/scripts/ebcli_installer.py
 ```
+
+
+
+
+
+
+
+# Deploying a Django application to Elastic Beanstalk
+
+## 1. Prerequisites
+
+To use any AWS service, including Elastic Beanstalk, you need to have an AWS account and credentials. [AWS](https://aws.amazon.com/).
+
+### 1.1. Prerequisites
+
+To follow this tutorial, you should have all of the Common Prerequisites for Python installed, including the following packages:
+
+* ** Python 3.7 or later **
+
+pip
+
+virtualenv
+
+awsebcli
+
