@@ -65,7 +65,7 @@ python ./aws-elastic-beanstalk-cli-setup/scripts/ebcli_installer.py
 
 ## 1. Prerequisites
 
-To use any AWS service, including Elastic Beanstalk, you need to have an AWS account and credentials. [AWS](https://aws.amazon.com/).
+To use any AWS service, including Elastic Beanstalk, you need to have an AWS account and credentials. [AWS]([https://aws.amazon.com/](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/eb-cli3.html)).
 
 ### 1.1. Prerequisites
 
