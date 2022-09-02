@@ -101,5 +101,5 @@ awsebcli
  
 * **AWS EB**
   This repository hosts scripts to generate self-contained installations of the [EB CLI](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/eb-cli3.html).
-* ** EB Git Repo**
+* **EB Git Repo**
   [EB Git Repo](https://github.com/aws/aws-elastic-beanstalk-cli-setup)
