@@ -96,3 +96,10 @@ awsebcli
   * This will deploy the app on to AWS EB server (This will take a couple of mins.
 * **eb open**
   * This will launch the app on your web.
+  
+  
+  #Useful resource links:
+ 
+ * ** AWS EB **
+  This repository hosts scripts to generate self-contained installations of the [EB CLI](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/eb-cli3.html).
+
