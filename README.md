@@ -97,9 +97,8 @@ awsebcli
 * **eb open**
   * This will launch the app on your web.
   
-  
-  #Useful resource links:
+#Useful resource links:
  
- * ** AWS EB **
+* **AWS EB**
   This repository hosts scripts to generate self-contained installations of the [EB CLI](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/eb-cli3.html).
 
