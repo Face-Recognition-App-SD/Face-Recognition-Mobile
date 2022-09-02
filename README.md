@@ -87,7 +87,7 @@ awsebcli
 * **pip freeze**
   * This lets you see all the libraries that are currently loaded in your virtual env.  This is a good debug tool.
 * **App modifictions**
-  * Run the below lines each time make modification to app.  these will ensure the changes are loaded ono the all
+  Run the below lines each time make modification to app.  these will ensure the changes are loaded ono the all
   * python manage.py migrate
   * python manage.py makemigrations
   * python manage.py makemigrations Facial_Recognition_App
