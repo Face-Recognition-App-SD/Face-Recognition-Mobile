@@ -68,7 +68,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     # phoneNumber = PhoneNumberField
     # (unique = True, null = False, blank = False)
     # date_of_birth = models.DateField(max_length=8)
-    stree_address = models.CharField(max_length=255)
+    street_address = models.CharField(max_length=255)
     city_address = models.CharField(max_length=255)
     zipcode_address = models.CharField(max_length=255)
     state_address = models.CharField(max_length=255)
