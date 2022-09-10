@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'drf_spectacular',
     'core',
     'user',
+    # 'address',
+    # 'phonenumber_field',
 ]
 
 MIDDLEWARE = [
