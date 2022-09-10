@@ -81,11 +81,13 @@ WSGI_APPLICATION = 'app.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'HOST': os.environ.get('DB_HOST'),
-        'NAME': os.environ.get('DB_NAME'),
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASS'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'Rostro_DB',
+        'USER': 'rostro_test',
+        'PASSWORD': '9vxL4_0pCa.58',
+        'HOST': 'db-rostro-mysql.cvd6cndsisc1.us-east-1.rds.amazonaws.com',
+        'PORT': '3306',
+        'OPTIONS': {'ssl': {'ca':r'app/app/us-east-1-bundle.pem'}},
     }
 }
 
