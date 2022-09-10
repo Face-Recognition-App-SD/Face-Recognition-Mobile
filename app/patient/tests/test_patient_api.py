@@ -10,10 +10,18 @@ from rest_framework import status
 from rest_framework.test import APIClient
 
 from core.models import Patient
-from patient.serializers import PatientSerializer
+from patient.serializers import (
 
+    PatientSerializer,
+    PatientDetailSerializer,
+)
 
 PATIENT_URL = reverse('patient:patient-list')
+
+
+def detail_url(patient_id):
+    """Create and return a patient detail URL."""
+    return reverse('patient:patient-detail', args=[patient_id])
 
 
 def create_patient(user, **params):
@@ -79,4 +87,14 @@ class PrivatePatientApiTests(TestCase):
         patients = Patient.objects.filter(user=self.user)
         serializer = PatientSerializer(patients, many=True)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(res.data, serializer.data)
+
+    def test_get_patient_detail(self):
+        """Test get patient detail."""
+        patient = create_patient(user=self.user)
+
+        url = detail_url(patient.id)
+        res = self.client.get(url)
+
+        serializer = PatientDetailSerializer(patient)
         self.assertEqual(res.data, serializer.data)

@@ -31,3 +31,10 @@ class PatientSerializer(serializers.ModelSerializer):
                   'relationship',
                   ]
         read_only_fields = ['id']
+
+
+class PatientDetailSerializer(PatientSerializer):
+    """Serializer for patient detail view."""
+
+    class Meta(PatientSerializer.Meta):
+        fields = PatientSerializer.Meta.fields + ['patient_description']
