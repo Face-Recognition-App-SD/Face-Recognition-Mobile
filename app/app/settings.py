@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'drf_spectacular',
     'core',
     'user',
+    'patient',
+    # 'fdadb',
     # 'address',
     # 'phonenumber_field',
 ]

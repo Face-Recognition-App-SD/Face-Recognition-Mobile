@@ -119,7 +119,7 @@ class Patient(models.Model):
         on_delete=models.CASCADE,
     )
 
-    patient_email = models.EmailField(max_length=255, unique=True)
+    patient_email = models.EmailField(max_length=255, unique=False)
     patient_first_name = models.CharField(max_length=255)
     patient_last_name = models.CharField(max_length=255)
     patient_description = models.TextField(blank=True)
@@ -148,7 +148,7 @@ class Patient(models.Model):
         default='Prefer not to respond',
         )
 
-    emergency_contact_email = models.EmailField(max_length=255, unique=True)
+    emergency_contact_email = models.EmailField(max_length=255, unique=False)
     emergency_contact_name = models.CharField(max_length=255)
     emergency_phone_number = models.CharField(validators=[phone_regex],
                                               max_length=17, blank=True)
