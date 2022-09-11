@@ -204,3 +204,14 @@ class PrivatePatientsApiTests(TestCase):
 
         self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
         self.assertFalse(Patients.objects.filter(id=patients.id).exists())
+
+    def test_patients_other_users_patients_error(self):
+        """Test trying to delete another users patientsgives error."""
+        new_user = create_user(email='user2@example.com', password='test123')
+        patients = create_patients(user=new_user)
+
+        url = detail_url(patients.id)
+        res = self.client.delete(url)
+
+        self.assertEqual(res.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertTrue(Patients.objects.filter(id=patients.id).exists())
