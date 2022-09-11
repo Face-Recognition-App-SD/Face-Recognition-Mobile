@@ -56,6 +56,9 @@ def create_patients(user, **params):
 
     return patients
 
+def create_user(**params):
+    """Create and return a new user."""
+    return get_user_model().objects.create_user(**params)
 
 class PublicPatientsAPITests(TestCase):
     """Test unauthenticated API requests."""
@@ -75,10 +78,8 @@ class PrivatePatientsApiTests(TestCase):
 
     def setUp(self):
         self.client = APIClient()
-        self.user = get_user_model().objects.create_user(
-            'user@example.com',
-            'testpass123',
-        )
+        self.user = create_user(email='user@example.com',
+                                password='test123')
         self.client.force_authenticate(self.user)
 
     def test_retrieve_petients(self):
@@ -96,10 +97,8 @@ class PrivatePatientsApiTests(TestCase):
 
     def test_patients_list_limited_to_user(self):
         """Test list of petients is limited to authenticated user."""
-        other_user = get_user_model().objects.create_user(
-            'other@example.com',
-            'password123',
-        )
+        other_user = create_user(email='other@example.com',
+                                 password='test123')
         create_patients(user=other_user)
 
         create_patients(user=self.user)
@@ -138,3 +137,23 @@ class PrivatePatientsApiTests(TestCase):
 
             self.assertEqual(getattr(patients, k), v)
         self.assertEqual(patients.user, self.user)
+
+
+    def test_partial_update(self):
+        """Test partial update of a patient."""
+        original_link = 'https://example.com/patient.pdf'
+        patient = create_patients(
+            user=self.user,
+            first_name='Sample patient name',
+            link=original_link,
+        )
+
+        payload = {'first_name': 'New patient first name'}
+        url = detail_url(patient.id)
+        res = self.client.patch(url, payload)
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        patient.refresh_from_db()
+        self.assertEqual(patient.first_name, payload['first_name'])
+        self.assertEqual(patient.link, original_link)
+        self.assertEqual(patient.user, self.user)
