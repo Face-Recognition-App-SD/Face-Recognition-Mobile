@@ -194,3 +194,13 @@ class PrivatePatientsApiTests(TestCase):
 
         patients.refresh_from_db()
         self.assertEqual(patients.user, self.user)
+
+    def test_delete_patients(self):
+        """Test deleting a patients successful."""
+        patients = create_patients(user=self.user)
+
+        url = detail_url(patients.id)
+        res = self.client.delete(url)
+
+        self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertFalse(Patients.objects.filter(id=patients.id).exists())
