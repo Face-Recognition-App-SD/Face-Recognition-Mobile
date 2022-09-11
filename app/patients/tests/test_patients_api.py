@@ -56,9 +56,11 @@ def create_patients(user, **params):
 
     return patients
 
+
 def create_user(**params):
     """Create and return a new user."""
     return get_user_model().objects.create_user(**params)
+
 
 class PublicPatientsAPITests(TestCase):
     """Test unauthenticated API requests."""
@@ -138,7 +140,6 @@ class PrivatePatientsApiTests(TestCase):
             self.assertEqual(getattr(patients, k), v)
         self.assertEqual(patients.user, self.user)
 
-
     def test_partial_update(self):
         """Test partial update of a patient."""
         original_link = 'https://example.com/patient.pdf'
@@ -157,3 +158,39 @@ class PrivatePatientsApiTests(TestCase):
         self.assertEqual(patient.first_name, payload['first_name'])
         self.assertEqual(patient.link, original_link)
         self.assertEqual(patient.user, self.user)
+
+    # def test_full_update(self):
+    #     """Test full update of patient."""
+    #     patients = create_patients(
+    #         user=self.user,
+    #         first_name='Sample patient title',
+    #         link='https://exmaple.com/patient.pdf',
+    #         description='Sample patient description.',
+    #     )
+
+    #     payload = {
+    #         'first_name': 'New patient title',
+    #         'link': 'https://example.com/new-patient.pdf',
+    #         'description': 'New patient description',
+    #         'age': 10,
+    #     }
+    #     url = detail_url(patients.id)
+    #     res = self.client.put(url, payload)
+
+    #     self.assertEqual(res.status_code, status.HTTP_200_OK)
+    #     patient.refresh_from_db()
+    #     for k, v in payload.items():
+    #         self.assertEqual(getattr(patients, k), v)
+    #     self.assertEqual(patients.user, self.user)
+
+    def test_update_user_returns_error(self):
+        """Test changing the patient user results in an error."""
+        new_user = create_user(email='user2@example.com', password='test123')
+        patients = create_patients(user=self.user)
+
+        payload = {'user': new_user.id}
+        url = detail_url(patients.id)
+        self.client.patch(url, payload)
+
+        patients.refresh_from_db()
+        self.assertEqual(patients.user, self.user)
