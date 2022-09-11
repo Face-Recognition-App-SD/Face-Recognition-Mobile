@@ -1,5 +1,5 @@
 """
-URL mappings for the patient app.
+URL mappings for the patients app.
 """
 from django.urls import (
     path,
@@ -8,13 +8,13 @@ from django.urls import (
 
 from rest_framework.routers import DefaultRouter
 
-from patient import views
+from patients import views
 
 
 router = DefaultRouter()
-router.register('patients', views.PatientViewSet)
+router.register('patientss', views.PatientsViewSet)
 
-app_name = 'patient'
+app_name = 'patients'
 
 urlpatterns = [
     path('', include(router.urls)),

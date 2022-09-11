@@ -50,16 +50,34 @@ class ModelTests(TestCase):
         self.assertTrue(user.is_superuser)
         self.assertTrue(user.is_staff)
 
-    def test_create_patient(self):
-        """Test creating a patient is successful."""
+    def test_create_patients(self):
+        """Test creating a patients is successful."""
         user = get_user_model().objects.create_user(
             'test@example.com',
             'testpass123',
         )
-        patient = models.Patient.objects.create(
+        patients = models.Patients.objects.create(
             user=user,
-            patient_first_name='Sample name',
-            patient_description='Sample description.',
+            first_name='Sample patients name',
+            last_name='Sample patients last name',
+            age=5,
+            med_list='samole med list',
+            phone_number='+12345678',
+            date_of_birth='2006-08-21',
+            street_address="sample address",
+            city_address="sample city",
+            zipcode_address="sample zip",
+            state_address="sample state",
+            creation_date='2006-08-21',
+            modified_date='2006-08-22',
+            description='Sample receipe description.',
+            gender='Male',
+            emergency_contact_name='Sample contact name',
+            emergency_phone_number='+12345678',
+            relationship='Father',
+            is_in_hospital=True,
+
+
         )
 
-        self.assertEqual(str(patient), patient.patient_first_name)
+        self.assertEqual(str(patients), patients.first_name)

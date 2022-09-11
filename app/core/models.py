@@ -112,44 +112,41 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
 
 
-class Patient(models.Model):
-    """Patient object."""
+class Patients(models.Model):
+    """Patients object."""
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
     )
 
-    patient_email = models.EmailField(max_length=255, unique=False)
-    patient_first_name = models.CharField(max_length=255)
-    patient_last_name = models.CharField(max_length=255)
-    patient_description = models.TextField(blank=True)
-    patient_med_list = models.TextField(blank=True)
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
+    # email = models.CharField(max_length=255)
+    description = models.TextField(blank=True)
+    med_list = models.TextField(blank=True)
+    age = models.IntegerField()
+    link = models.CharField(max_length=255, blank=True)
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$',
                                  message="Phone number must be entered "
                                  + "in the format:'+999999999'. Up" +
                                  "to 15 digits allowed.")
-    patient_phone_number = models.CharField(validators=[phone_regex],
-                                            max_length=17, blank=True)
-    # Validators should be a list
-    # patient_phoneNumber = PhoneNumberField
-    # (unique=True, null=False, blank=False)
-    patient_date_of_birth = models.DateField(auto_now=False, null=True)
-    patient_street_address = models.CharField(max_length=255)
-    patient_city_address = models.CharField(max_length=255)
-    patient_zipcode_address = models.CharField(max_length=255)
-    patient_state_address = models.CharField(max_length=255)
-    patient_creation_date = models.DateTimeField(auto_now_add=True)
-    patient_modified_date = models.DateTimeField(auto_now=True)
-    patient_link = models.CharField(max_length=255, blank=True)
-
-    patient_gender = models.CharField(
+    phone_number = models.CharField(validators=[phone_regex],
+                                    max_length=17, blank=True)
+    date_of_birth = models.DateField(auto_now=False, null=True)
+    street_address = models.CharField(max_length=255, blank=True)
+    city_address = models.CharField(max_length=255, blank=True)
+    zipcode_address = models.CharField(max_length=255, blank=True)
+    state_address = models.CharField(max_length=255, blank=True)
+    creation_date = models.DateTimeField(auto_now_add=True, blank=True)
+    modified_date = models.DateTimeField(auto_now=True, blank=True)
+    gender = models.CharField(
         max_length=50,
         choices=GENDER_CHOICES,
         default='Prefer not to respond',
         )
 
-    emergency_contact_email = models.EmailField(max_length=255, unique=False)
-    emergency_contact_name = models.CharField(max_length=255)
+    emergency_contact_name = models.CharField(max_length=255, default="",
+                                              blank=True)
     emergency_phone_number = models.CharField(validators=[phone_regex],
                                               max_length=17, blank=True)
 
@@ -159,15 +156,15 @@ class Patient(models.Model):
         default='Not Applicable',
         )
 
-    is_active = models.BooleanField(default=True)
+    is_in_hospital = models.BooleanField(default=True)
 
     def greet(self):
         if self.patient_gender == "Male":
-            return 'Mr. ' + self.patient_last_name
+            return 'Mr. ' + self.last_name
         elif self.patient_gender == "Female":
-            return 'Ms. ' + self.patient_last_name
+            return 'Ms. ' + self.last_name
         else:
-            return self.patient_last_name
+            return self.last_name
 
     def __str__(self):
-        return self.patient_first_name
+        return self.first_name
