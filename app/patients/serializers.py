@@ -6,7 +6,18 @@ from rest_framework import serializers
 from core.models import (
     Patients,
     Tag,
+    Treatment,
 )
+
+
+class TreatmentSerializer(serializers.ModelSerializer):
+    """Serializer for treatment."""
+
+    class Meta:
+        model = Treatment
+        fields = ['id', 'name']
+        read_only_fields = ['id']
+
 
 
 class TagSerializer(serializers.ModelSerializer):

@@ -14,7 +14,7 @@ from patients import views
 router = DefaultRouter()
 router.register('patientss', views.PatientsViewSet)
 router.register('tags', views.TagViewSet)
-
+router.register('treatment', views.TreatmentViewSet)
 
 app_name = 'patients'
 

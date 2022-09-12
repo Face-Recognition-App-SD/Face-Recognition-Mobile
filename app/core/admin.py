@@ -49,3 +49,4 @@ admin.site.register(models.Patients)
 # hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
 # admin.site.register(models.Patient)
 admin.site.register(models.Tag)
+admin.site.register(models.Treatment)
