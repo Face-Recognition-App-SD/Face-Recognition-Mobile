@@ -54,7 +54,8 @@ class TagViewSet(mixins.DestroyModelMixin,
         return self.queryset.filter(user=self.request.user).order_by('-name')
 
 
-class TreatmentViewSet(mixins.UpdateModelMixin,
+class TreatmentViewSet(mixins.DestroyModelMixin,
+                       mixins.UpdateModelMixin,
                        mixins.ListModelMixin,
                        viewsets.GenericViewSet):
 

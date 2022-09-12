@@ -74,12 +74,23 @@ class PrivateTreatmentApiTests(TestCase):
 
     def test_update_treatment(self):
         """Test updating an treatment."""
-        treatment = Treatment.objects.create(user=self.user, name='Cilantro')
+        treatment = Treatment.objects.create(user=self.user, name='advil')
 
-        payload = {'name': 'Coriander'}
+        payload = {'name': 'aspirin'}
         url = detail_url(treatment.id)
         res = self.client.patch(url, payload)
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         treatment.refresh_from_db()
         self.assertEqual(treatment.name, payload['name'])
+
+    def test_delete_treatment(self):
+        """Test deleting an treatment."""
+        treatment = Treatment.objects.create(user=self.user, name='peniciline')
+
+        url = detail_url(treatment.id)
+        res = self.client.delete(url)
+
+        self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
+        treatments = Treatment.objects.filter(user=self.user)
+        self.assertFalse(treatments.exists())
