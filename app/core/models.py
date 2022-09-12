@@ -127,6 +127,7 @@ class Patients(models.Model):
     age = models.IntegerField()
     link = models.CharField(max_length=255, blank=True)
     tags = models.ManyToManyField('Tag')
+    treatment = models.ManyToManyField('Treatment')
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$',
                                  message="Phone number must be entered "
                                  + "in the format:'+999999999'. Up" +
@@ -173,6 +174,18 @@ class Patients(models.Model):
 
 class Tag(models.Model):
     """Tag for filtering recipes."""
+    name = models.CharField(max_length=255)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+    )
+
+    def __str__(self):
+        return self.name
+
+
+class Treatment(models.Model):
+    """Ingredient for recipes."""
     name = models.CharField(max_length=255)
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,

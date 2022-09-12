@@ -36,7 +36,7 @@ def create_patients(user, **params):
         'last_name': 'Sample patients last_name',
         'med_list': 'sample med list',
         'age': 22,
-        'phone_number': "+12345667",
+        'phone_number': '+12345667',
         'date_of_birth': '2006-08-21',
         'street_address':  "sample address",
         'city_address': "sample city",
@@ -169,19 +169,23 @@ class PrivatePatientsApiTests(TestCase):
     #         first_name='Sample patient title',
     #         link='https://exmaple.com/patient.pdf',
     #         description='Sample patient description.',
+    #         phone_number = '+12345678',
+    #         emergency_phone_number = '+12345678',
     #     )
     #     print(patients.first_name)
     #     payload = {
     #         'first_name': 'New patient title',
     #         'link': 'https://example.com/new-patient.pdf',
     #         'description': 'New patient description',
+    #         'phone_number' : '+12345698',
+    #         'emergency_phone_number' : '+12345698',
     #         # 'age': 10,
     #     }
     #     url = detail_url(patients.id)
     #     print(url)
     #     res = self.client.put(url, payload)
 
-    #     # self.assertEqual(res.status_code, status.HTTP_200_OK)
+    #     self.assertEqual(res.status_code, status.HTTP_200_OK)
     #     patients.refresh_from_db()
     #     for k, v in payload.items():
     #         self.assertEqual(getattr(patients, k), v)
