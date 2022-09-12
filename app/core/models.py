@@ -126,6 +126,7 @@ class Patients(models.Model):
     med_list = models.TextField(blank=True)
     age = models.IntegerField()
     link = models.CharField(max_length=255, blank=True)
+    tags = models.ManyToManyField('Tag')
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$',
                                  message="Phone number must be entered "
                                  + "in the format:'+999999999'. Up" +
@@ -168,3 +169,88 @@ class Patients(models.Model):
 
     def __str__(self):
         return self.first_name
+
+
+class Tag(models.Model):
+    """Tag for filtering recipes."""
+    name = models.CharField(max_length=255)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+    )
+
+    def __str__(self):
+        return self.name
+
+# # hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+# class Patient(models.Model):
+#     """patient object."""
+#     user = models.ForeignKey(
+#         settings.AUTH_USER_MODEL,
+#         on_delete=models.CASCADE,
+#     )
+#     title = models.CharField(max_length=255)
+#     # firsttt_name = models.CharField(max_length=255)
+#     description = models.TextField(blank=True)
+#     time_minutes = models.IntegerField()
+#     price = models.DecimalField(max_digits=5, decimal_places=2)
+#     link = models.CharField(max_length=255, blank=True)
+
+    # def __str__(self):
+    #     return self.title
+
+    # """patient object."""
+    # user = models.ForeignKey(
+    #     settings.AUTH_USER_MODEL,
+    #     on_delete=models.CASCADE,
+    # )
+
+    # first_name = models.CharField(max_length=255)
+    # last_name = models.CharField(max_length=255)
+    # # email = models.CharField(max_length=255)
+    # description = models.TextField(blank=True)
+    # # med_list = models.TextField(blank=True)
+    # # age = models.IntegerField()
+    # # link = models.CharField(max_length=255, blank=True)
+    # # phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$',
+    # #                              message="Phone number must be entered "
+    # #                              + "in the format:'+999999999'. Up" +
+    # #                              "to 15 digits allowed.")
+    # # phone_number = models.CharField(validators=[phone_regex],
+    # #                                 max_length=17, blank=True)
+    # # date_of_birth = models.DateField(auto_now=False, null=True)
+    # # street_address = models.CharField(max_length=255, blank=True)
+    # # city_address = models.CharField(max_length=255, blank=True)
+    # # zipcode_address = models.CharField(max_length=255, blank=True)
+    # # state_address = models.CharField(max_length=255, blank=True)
+    # # creation_date = models.DateTimeField(auto_now_add=True, blank=True)
+    # # modified_date = models.DateTimeField(auto_now=True, blank=True)
+    # # gender = models.CharField(
+    # #     max_length=50,
+    # #     choices=GENDER_CHOICES,
+    # #     default='Prefer not to respond',
+    # #     )
+
+    # # emergency_contact_name = models.CharField(max_length=255, default="",
+    # #                                           blank=True)
+    # # emergency_phone_number = models.CharField(validators=[phone_regex],
+    # #                                           max_length=17, blank=True)
+
+    # # relationship = models.CharField(
+    # #     max_length=50,
+    # #     choices=RELATIONSHIP_CHOICES,
+    # #     default='Not Applicable',
+    # #     )
+
+    # # is_in_hospital = models.BooleanField(default=True)
+
+    # def greet(self):
+    #     if self.patient_gender == "Male":
+    #         return 'Mr. ' + self.last_name
+    #     elif self.patient_gender == "Female":
+    #         return 'Ms. ' + self.last_name
+    #     else:
+    #         return self.last_name
+
+    # def __str__(self):
+    #     return self.first_name

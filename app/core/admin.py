@@ -46,4 +46,6 @@ class UserAdmin(BaseUserAdmin):
 
 admin.site.register(models.User, UserAdmin)
 admin.site.register(models.Patients)
+# hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
 # admin.site.register(models.Patient)
+admin.site.register(models.Tag)

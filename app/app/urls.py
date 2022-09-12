@@ -31,6 +31,8 @@ urlpatterns = [
     ),
     path('api/user/', include('user.urls')),
     path('api/patients/', include('patients.urls')),
+    # hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeS
+    # path('api/patient/', include('patient.urls')),
     # path('api/patients/', include('patients.urls')),
     # path('api/patient/', include('patient.urls')),
 ]

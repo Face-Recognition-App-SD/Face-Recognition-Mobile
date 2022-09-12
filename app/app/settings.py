@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'user',
     # 'patient',
     'patients',
-    # 'fdadb',
+    # 'recipe',
+    # # 'fdadb',
     # 'address',
     # 'phonenumber_field',
 ]

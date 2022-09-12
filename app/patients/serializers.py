@@ -3,7 +3,10 @@ Serializers for patients APIs
 """
 from rest_framework import serializers
 
-from core.models import Patients
+from core.models import (
+    Patients,
+    Tag,
+)
 
 
 class PatientsSerializer(serializers.ModelSerializer):
@@ -42,3 +45,12 @@ class PatientsDetailSerializer(PatientsSerializer):
 
     class Meta(PatientsSerializer.Meta):
         fields = PatientsSerializer.Meta.fields + ['description']
+
+
+class TagSerializer(serializers.ModelSerializer):
+    """Serializer for tags."""
+
+    class Meta:
+        model = Tag
+        fields = ['id', 'name']
+        read_only_fields = ['id']

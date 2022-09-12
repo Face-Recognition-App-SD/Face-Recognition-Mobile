@@ -167,18 +167,19 @@ class PrivatePatientsApiTests(TestCase):
     #         link='https://exmaple.com/patient.pdf',
     #         description='Sample patient description.',
     #     )
-
+    #     print(patients.first_name)
     #     payload = {
     #         'first_name': 'New patient title',
     #         'link': 'https://example.com/new-patient.pdf',
     #         'description': 'New patient description',
-    #         'age': 10,
+    #         # 'age': 10,
     #     }
     #     url = detail_url(patients.id)
+    #     print(url)
     #     res = self.client.put(url, payload)
 
-    #     self.assertEqual(res.status_code, status.HTTP_200_OK)
-    #     patient.refresh_from_db()
+    #     # self.assertEqual(res.status_code, status.HTTP_200_OK)
+    #     patients.refresh_from_db()
     #     for k, v in payload.items():
     #         self.assertEqual(getattr(patients, k), v)
     #     self.assertEqual(patients.user, self.user)
