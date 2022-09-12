@@ -265,3 +265,43 @@ class PrivatePatientsApiTests(TestCase):
                 user=self.user,
             ).exists()
             self.assertTrue(exists)
+
+    def test_create_tag_on_update(self):
+        """Test create tag when updating a patients."""
+        patients = create_patients(user=self.user)
+
+        payload = {'tags': [{'name': 'Improving'}]}
+        url = detail_url(patients.id)
+        res = self.client.patch(url, payload, format='json')
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        new_tag = Tag.objects.get(user=self.user, name='Improving')
+        self.assertIn(new_tag, patients.tags.all())
+
+    def test_update_patients_assign_tag(self):
+        """Test assigning an existing tag when updating a patients."""
+        tag_stable = Tag.objects.create(user=self.user, name='Stable')
+        patients = create_patients(user=self.user)
+        patients.tags.add(tag_stable)
+
+        tag_Improving = Tag.objects.create(user=self.user, name='Improving')
+        payload = {'tags': [{'name': 'Improving'}]}
+        url = detail_url(patients.id)
+        res = self.client.patch(url, payload, format='json')
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertIn(tag_Improving, patients.tags.all())
+        self.assertNotIn(tag_stable, patients.tags.all())
+
+    def test_clear_patients_tags(self):
+        """Test clearing a patients tags."""
+        tag = Tag.objects.create(user=self.user, name='Regressing')
+        patients = create_patients(user=self.user)
+        patients.tags.add(tag)
+
+        payload = {'tags': []}
+        url = detail_url(patients.id)
+        res = self.client.patch(url, payload, format='json')
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(patients.tags.count(), 0)
