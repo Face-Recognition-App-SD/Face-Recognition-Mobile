@@ -15,9 +15,11 @@ from patients.serializers import TagSerializer
 
 TAGS_URL = reverse('patients:tag-list')
 
+
 def detail_url(tag_id):
     """Create and return a tag detail url."""
     return reverse('patients:tag-detail', args=[tag_id])
+
 
 def create_user(email='user@example.com', password='testpass123'):
     """Create and return a user."""
