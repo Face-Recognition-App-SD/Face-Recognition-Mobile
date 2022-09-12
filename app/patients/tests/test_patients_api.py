@@ -10,7 +10,10 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
 
-from core.models import Patients
+from core.models import (
+    Patients,
+    Tag,
+)
 
 from patients.serializers import (
     PatientsSerializer,
@@ -216,3 +219,49 @@ class PrivatePatientsApiTests(TestCase):
 
         self.assertEqual(res.status_code, status.HTTP_404_NOT_FOUND)
         self.assertTrue(Patients.objects.filter(id=patients.id).exists())
+
+    def test_create_patients_with_new_tags(self):
+        """Test creating a patients with new tags."""
+        payload = {
+            'first_name': 'Elen',
+            'last_name': 'Jack',
+            'age': 50,
+            'tags': [{'name': 'bad'}, {'name': 'good'}],
+        }
+        res = self.client.post(PATIENTS_URL, payload, format='json')
+
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+        patientss = Patients.objects.filter(user=self.user)
+        self.assertEqual(patientss.count(), 1)
+        patients = patientss[0]
+        self.assertEqual(patients.tags.count(), 2)
+        for tag in payload['tags']:
+            exists = patients.tags.filter(
+                name=tag['name'],
+                user=self.user,
+            ).exists()
+            self.assertTrue(exists)
+
+    def test_create_patients_with_existing_tags(self):
+        """Test creating a patients with existing tag."""
+        tag_good = Tag.objects.create(user=self.user, name='good')
+        payload = {
+            'first_name': 'jim',
+            'last_name': 'Sample patients last name',
+            'age': 60,
+            'tags': [{'name': 'good'}, {'name': 'Critical'}],
+        }
+        res = self.client.post(PATIENTS_URL, payload, format='json')
+
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+        patientss = Patients.objects.filter(user=self.user)
+        self.assertEqual(patientss.count(), 1)
+        patients = patientss[0]
+        self.assertEqual(patients.tags.count(), 2)
+        self.assertIn(tag_good, patients.tags.all())
+        for tag in payload['tags']:
+            exists = patients.tags.filter(
+                name=tag['name'],
+                user=self.user,
+            ).exists()
+            self.assertTrue(exists)
