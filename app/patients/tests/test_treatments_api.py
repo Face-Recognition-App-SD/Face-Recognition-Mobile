@@ -16,6 +16,11 @@ from patients.serializers import TreatmentSerializer
 TREATMENTS_URL = reverse('patients:treatment-list')
 
 
+def detail_url(treatment_id):
+    """Create and return an treatment detail URL."""
+    return reverse('patients:treatment-detail', args=[treatment_id])
+
+
 def create_user(email='user@example.com', password='testpass123'):
     """Create and return user."""
     return get_user_model().objects.create_user(email=email, password=password)
@@ -66,3 +71,15 @@ class PrivateTreatmentApiTests(TestCase):
         self.assertEqual(len(res.data), 1)
         self.assertEqual(res.data[0]['name'], treatment.name)
         self.assertEqual(res.data[0]['id'], treatment.id)
+
+    def test_update_treatment(self):
+        """Test updating an treatment."""
+        treatment = Treatment.objects.create(user=self.user, name='Cilantro')
+
+        payload = {'name': 'Coriander'}
+        url = detail_url(treatment.id)
+        res = self.client.patch(url, payload)
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        treatment.refresh_from_db()
+        self.assertEqual(treatment.name, payload['name'])

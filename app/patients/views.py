@@ -54,7 +54,10 @@ class TagViewSet(mixins.DestroyModelMixin,
         return self.queryset.filter(user=self.request.user).order_by('-name')
 
 
-class TreatmentViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+class TreatmentViewSet(mixins.UpdateModelMixin,
+                       mixins.ListModelMixin,
+                       viewsets.GenericViewSet):
+
     """Manage treatment in the database."""
     serializer_class = serializers.TreatmentSerializer
     queryset = Treatment.objects.all()
