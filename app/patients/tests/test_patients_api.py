@@ -333,11 +333,6 @@ class PrivatePatientsApiTests(TestCase):
     def test_create_patients_with_new_Treatment(self):
         """Test creating a patients with new Treatment."""
         payload = {
-            # 'title': 'Cauliflower Tacos',
-            # 'time_minutes': 60,
-            # 'price': Decimal('4.30'),
-            # 'treatment': [{'name': 'Cauliflower'}, {'name': 'Salt'}],
-
             "first_name": "joe",
             "last_name": "jay",
             "age": 0,
