@@ -174,14 +174,8 @@ class PrivatePatientsApiTests(TestCase):
             emergency_phone_number='+12345678',
         )
         print(patients.first_name)
-        payload = {
-            # 'first_name': 'New patient title',
-            # 'link': 'https://example.com/new-patient.pdf',
-            # 'description': 'New patient description',
-            # 'phone_number' : '+12345698',
-            # 'emergency_phone_number' : '+12345698',
-            # # 'age': 10,
 
+        payload = {
             "first_name": "joe",
             "last_name": "jay",
             "age": 0,
