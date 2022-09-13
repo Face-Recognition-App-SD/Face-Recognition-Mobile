@@ -39,13 +39,14 @@ class PatientsViewSet(viewsets.ModelViewSet):
         serializer.save(user=self.request.user)
 
 
-class TagViewSet(mixins.DestroyModelMixin,
-                 mixins.UpdateModelMixin,
-                 mixins.ListModelMixin,
-                 viewsets.GenericViewSet):
-    """Manage tags in the database."""
-    serializer_class = serializers.TagSerializer
-    queryset = Tag.objects.all()
+"""Base view set for Patiens atributes"""
+
+
+class BasePatientsAttrViewSet(mixins.DestroyModelMixin,
+                              mixins.UpdateModelMixin,
+                              mixins.ListModelMixin,
+                              viewsets.GenericViewSet):
+
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
@@ -54,17 +55,14 @@ class TagViewSet(mixins.DestroyModelMixin,
         return self.queryset.filter(user=self.request.user).order_by('-name')
 
 
-class TreatmentViewSet(mixins.DestroyModelMixin,
-                       mixins.UpdateModelMixin,
-                       mixins.ListModelMixin,
-                       viewsets.GenericViewSet):
+class TagViewSet(BasePatientsAttrViewSet):
+    """Manage tags in the database."""
+    serializer_class = serializers.TagSerializer
+    queryset = Tag.objects.all()
+
+
+class TreatmentViewSet(BasePatientsAttrViewSet):
 
     """Manage treatment in the database."""
     serializer_class = serializers.TreatmentSerializer
     queryset = Treatment.objects.all()
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
-
-    def get_queryset(self):
-        """Filter queryset to authenticated user."""
-        return self.queryset.filter(user=self.request.user).order_by('-name')
