@@ -399,3 +399,43 @@ class PrivatePatientsApiTests(TestCase):
                 user=self.user,
             ).exists()
             self.assertTrue(exists)
+
+    def test_create_treatment_on_update(self):
+        """Test creating an treatment when updating a patients."""
+        patients = create_patients(user=self.user)
+
+        payload = {'treatment': [{'name': 'Limes'}]}
+        url = detail_url(patients.id)
+        res = self.client.patch(url, payload, format='json')
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        new_treatment = Treatment.objects.get(user=self.user, name='Limes')
+        self.assertIn(new_treatment, patients.treatment.all())
+
+    def test_update_patients_assign_treatment(self):
+        """Test assigning an existing treatment when updating a patients."""
+        treatment1 = Treatment.objects.create(user=self.user, name='Pepper')
+        patients = create_patients(user=self.user)
+        patients.treatment.add(treatment1)
+
+        treatment2 = Treatment.objects.create(user=self.user, name='Chili')
+        payload = {'treatment': [{'name': 'Chili'}]}
+        url = detail_url(patients.id)
+        res = self.client.patch(url, payload, format='json')
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertIn(treatment2, patients.treatment.all())
+        self.assertNotIn(treatment1, patients.treatment.all())
+
+    def test_clear_patients_treatment(self):
+        """Test clearing a patients treatment."""
+        treatment = Treatment.objects.create(user=self.user, name='Garlic')
+        patients = create_patients(user=self.user)
+        patients.treatment.add(treatment)
+
+        payload = {'treatment': []}
+        url = detail_url(patients.id)
+        res = self.client.patch(url, payload, format='json')
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(patients.treatment.count(), 0)

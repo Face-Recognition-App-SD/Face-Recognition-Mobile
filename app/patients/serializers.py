@@ -103,10 +103,13 @@ class PatientsDetailSerializer(PatientsSerializer):
     def update(self, instance, validated_data):
         """Update patients."""
         tags = validated_data.pop('tags', None)
+        treatment = validated_data.pop('treatment', None)
         if tags is not None:
             instance.tags.clear()
             self._get_or_create_tags(tags, instance)
-
+        if treatment is not None:
+            instance.treatment.clear()
+            self._get_or_create_treatment(treatment, instance)
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
 
