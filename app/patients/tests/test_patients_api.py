@@ -13,7 +13,7 @@ from rest_framework.test import APIClient
 from core.models import (
     Patients,
     Tag,
-    # Treatment,
+    Treatment,
 )
 
 from patients.serializers import (
@@ -330,47 +330,83 @@ class PrivatePatientsApiTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(patients.tags.count(), 0)
 
-    # def test_create_patients_with_new_treatment(self):
-    #     """Test creating a patients with new treatment."""
-    #     payload = {
-    #         'first_name': 'Cauliflower Tacos',
-    #         'age': 60,
-    #         'treatment': [{'name': 'Cauliflower'}, {'name': 'Salt'}],
-    #     }
-    #     res = self.client.post(PATIENTS_URL, payload, format='json')
+    def test_create_patients_with_new_Treatment(self):
+        """Test creating a patients with new Treatment."""
+        payload = {
+            # 'title': 'Cauliflower Tacos',
+            # 'time_minutes': 60,
+            # 'price': Decimal('4.30'),
+            # 'treatment': [{'name': 'Cauliflower'}, {'name': 'Salt'}],
 
-    #     self.assertEqual(res.status_code, status.HTTP_201_CREATED)
-    #     patientss = Patients.objects.filter(user=self.user)
-    #     self.assertEqual(patientss.count(), 1)
-    #     patients = patientss[0]
-    #     self.assertEqual(patients.treatment.count(), 2)
-    #     for treatments in payload['treatment']:
-    #         exists = patients.treatment.filter(
-    #             # mant be without s
-    #             name=treatments['name'],
-    #             user=self.user,
-    #         ).exists()
-    #         self.assertTrue(exists)
+            "first_name": "joe",
+            "last_name": "jay",
+            "age": 0,
+            "med_list": "string",
+            "phone_number": "+999999999",
+            # "date_of_birth": "2022-09-12",
+            "street_address": "string",
+            "city_address": "string",
+            "zipcode_address": "string",
+            "state_address": "string",
+            "link": "string",
+            "emergency_contact_name": "string",
+            "emergency_phone_number": "+123456789",
+            "relationship": "Spouse",
+            "gender": "Male",
+            "is_in_hospital": True,
+            "description": "string",
+            "treatment": [{'name': 'Cauliflower'}, {'name': 'Salt'}],
 
-    # def test_create_patientss_with_existing_treatment(self):
-    #     """Test creating a new patients with existing treatment."""
-    #     treatment = Treatment.objects.create(user=self.user, name='Lemon')
-    #     payload = {
-    #         'first_name': 'Vietnamese Soup',
-    #         'age': 25,
-    #         'treatment': [{'name': 'Lemon'}, {'name': 'Fish Sauce'}],
-    #     }
-    #     res = self.client.post(PATIENTS_URL, payload, format='json')
+        }
+        res = self.client.post(PATIENTS_URL, payload, format='json')
 
-    #     self.assertEqual(res.status_code, status.HTTP_201_CREATED)
-    #     patientss = Patients.objects.filter(user=self.user)
-    #     self.assertEqual(patientss.count(), 1)
-    #     patients = patientss[0]
-    #     self.assertEqual(patients.treatment.count(), 2)
-    #     self.assertIn(treatments, patients.treatment.all())
-    #     for treatments in payload['treatment']:
-    #         exists = patients.treatment.filter(
-    #             name=treatments['name'],
-    #             user=self.user,
-    #         ).exists()
-    #         self.assertTrue(exists)
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+        patientss = Patients.objects.filter(user=self.user)
+        self.assertEqual(patientss.count(), 1)
+        patients = patientss[0]
+        self.assertEqual(patients.treatment.count(), 2)
+        for treatmen in payload['treatment']:
+            exists = patients.treatment.filter(
+                name=treatmen['name'],
+                user=self.user,
+            ).exists()
+            self.assertTrue(exists)
+
+    def test_create_patients_with_existing_treatment(self):
+        """Test creating a new patients with existing treatment."""
+        treatmen = Treatment.objects.create(user=self.user, name='Lemon')
+        payload = {
+            "first_name": "joe",
+            "last_name": "jay",
+            "age": 0,
+            "med_list": "string",
+            "phone_number": "+999999999",
+            # "date_of_birth": "2022-09-12",
+            "street_address": "string",
+            "city_address": "string",
+            "zipcode_address": "string",
+            "state_address": "string",
+            "link": "string",
+            "emergency_contact_name": "string",
+            "emergency_phone_number": "+123456789",
+            "relationship": "Spouse",
+            "gender": "Male",
+            "is_in_hospital": True,
+            "description": "string",
+            'treatment': [{'name': 'Lemon'}, {'name': 'Fish Sauce'}],
+
+        }
+        res = self.client.post(PATIENTS_URL, payload, format='json')
+
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+        patientss = Patients.objects.filter(user=self.user)
+        self.assertEqual(patientss.count(), 1)
+        patients = patientss[0]
+        self.assertEqual(patients.treatment.count(), 2)
+        self.assertIn(treatmen, patients.treatment.all())
+        for treatmen in payload['treatment']:
+            exists = patients.treatment.filter(
+                name=treatmen['name'],
+                user=self.user,
+            ).exists()
+            self.assertTrue(exists)

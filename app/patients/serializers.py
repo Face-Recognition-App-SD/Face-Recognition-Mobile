@@ -32,6 +32,7 @@ class PatientsSerializer(serializers.ModelSerializer):
     """Serializer for patients."""
 
     tags = TagSerializer(many=True, required=False)
+    treatment = TreatmentSerializer(many=True, required=False)
 
     class Meta:
         model = Patients
@@ -56,6 +57,7 @@ class PatientsSerializer(serializers.ModelSerializer):
                   'gender',
                   'is_in_hospital',
                   'tags',
+                  'treatment',
 
                   ]
 
@@ -78,23 +80,23 @@ class PatientsDetailSerializer(PatientsSerializer):
             )
             patients.tags.add(tag_obj)
 
-    # def create(self, validated_data):
-    #     """Create a patients."""
-    #     tags = validated_data.pop('tags', [])
-    #     patients = Patients.objects.create(**validated_data)
-    #     auth_user = self.context['request'].user
-    #     for tag in tags:
-    #         tag_obj, created = Tag.objects.get_or_create(
-    #             user=auth_user,
-    #             **tag,
-    #         )
-    #         patients.tags.add(tag_obj)
+    def _get_or_create_treatment(self, treatment, patients):
+        """Handle getting or creating treatment as needed."""
+        auth_user = self.context['request'].user
+        for treatmen in treatment:
+            treatmen_obj, created = Treatment.objects.get_or_create(
+                user=auth_user,
+                **treatmen,
+            )
+            patients.treatment.add(treatmen_obj)
 
     def create(self, validated_data):
         """Create a patients."""
         tags = validated_data.pop('tags', [])
+        treatment = validated_data.pop('treatment', [])
         patients = Patients.objects.create(**validated_data)
         self._get_or_create_tags(tags, patients)
+        self._get_or_create_treatment(treatment, patients)
 
         return patients
 
