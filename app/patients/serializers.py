@@ -115,3 +115,13 @@ class PatientsDetailSerializer(PatientsSerializer):
 
         instance.save()
         return instance
+
+
+class PatientsImageSerializer(serializers.ModelSerializer):
+    """Serializer for uploading images to patients."""
+
+    class Meta:
+        model = Patients
+        fields = ['id', 'image']
+        read_only_fields = ['id']
+        extra_kwargs = {'image': {'required': 'True'}}
