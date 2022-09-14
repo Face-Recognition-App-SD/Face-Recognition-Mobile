@@ -1,6 +1,9 @@
 """
 Database models.
 """
+import uuid
+import os
+
 from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import (
@@ -11,6 +14,14 @@ from django.contrib.auth.models import (
 # from phonenumber_field.modelfields import PhoneNumberField
 from django.core.validators import RegexValidator
 # from address.models import AddressField
+
+
+def patients_image_file_path(instance, filename):
+    """Generate file path for new patients image."""
+    ext = os.path.splitext(filename)[1]
+    filename = f'{uuid.uuid4()}{ext}'
+
+    return os.path.join('uploads', 'patients', filename)
 
 
 class UserManager(BaseUserManager):
@@ -128,6 +139,7 @@ class Patients(models.Model):
     link = models.CharField(max_length=255, blank=True)
     tags = models.ManyToManyField('Tag')
     treatment = models.ManyToManyField('Treatment')
+    image = models.ImageField(null=True, upload_to=patients_image_file_path)
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$',
                                  message="Phone number must be entered "
                                  + "in the format:'+999999999'. Up" +
@@ -173,7 +185,7 @@ class Patients(models.Model):
 
 
 class Tag(models.Model):
-    """Tag for filtering recipes."""
+    """Tag for filtering patients."""
     name = models.CharField(max_length=255)
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,

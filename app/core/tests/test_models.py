@@ -1,7 +1,7 @@
 """
 Tests for models.
 """
-# from decimal import Decimal
+from unittest.mock import patch
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 
@@ -86,55 +86,6 @@ class ModelTests(TestCase):
 
         self.assertEqual(str(patients), patients.first_name)
 
-#  hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
-    # def test_create_patient(self):
-    #     """Test creating a patient is successful."""
-    #     user = get_user_model().objects.create_user(
-    #         'test@example.com',
-    #         'testpass123',
-    #     )
-    #     patient = models.Patient.objects.create(
-    #         user=user,
-    #         title='Sample patient name',
-    #         # firsttt_name = 'Sample patient first name',
-    #         time_minutes=5,
-    #         price=Decimal('5.50'),
-    #         description='Sample receipe description.',
-    #     )
-
-    #     self.assertEqual(str(patient), patient.title)
-
-        # """Test creating a patient is successful."""
-        # user = get_user_model().objects.create_user(
-        #     'test@example.com',
-        #     'testpass123',
-        # )
-        # patient = models.Patient.objects.create(
-        #     user=user,
-        #     first_name='Sample patient name',
-        #     last_name='Sample patient last name',
-        #     # age=5,
-        #     # med_list='samole med list',
-        #     # phone_number='+12345678',
-        #     # date_of_birth='2006-08-21',
-        #     # street_address="sample address",
-        #     # city_address="sample city",
-        #     # zipcode_address="sample zip",
-        #     # state_address="sample state",
-        #     # creation_date='2006-08-21',
-        #     # modified_date='2006-08-22',
-        #     description='Sample receipe description.',
-        #     # gender='Male',
-        #     # emergency_contact_name='Sample contact name',
-        #     # emergency_phone_number='+12345678',
-        #     # relationship='Father',
-        #     # is_in_hospital=True,
-        # )
-
-        # self.assertEqual(str(patient), patient.first_name)
-
-#  hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
-
     def test_create_tag(self):
         """Test creating a tag is successful."""
         user = create_user()
@@ -151,3 +102,12 @@ class ModelTests(TestCase):
         )
 
         self.assertEqual(str(treatment), treatment.name)
+
+    @patch('core.models.uuid.uuid4')
+    def test_patient_file_name_uuid(self, mock_uuid):
+        """Test generating image path."""
+        uuid = 'test-uuid'
+        mock_uuid.return_value = uuid
+        file_path = models.patients_image_file_path(None, 'example.jpg')
+
+        self.assertEqual(file_path, f'uploads/patients/{uuid}.jpg')
