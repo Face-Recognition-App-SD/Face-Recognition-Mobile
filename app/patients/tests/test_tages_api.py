@@ -8,7 +8,10 @@ from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIClient
 
-from core.models import Tag
+from core.models import (
+    Tag,
+    Patients,
+)
 
 from patients.serializers import TagSerializer
 
@@ -94,3 +97,90 @@ class PrivateTagsApiTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
         tags = Tag.objects.filter(user=self.user)
         self.assertFalse(tags.exists())
+
+    def test_filter_tags_assigned_to_patients(self):
+        """Test listing tags to those assigned to patients."""
+        tag1 = Tag.objects.create(user=self.user, name='Breakfast')
+        tag2 = Tag.objects.create(user=self.user, name='Lunch')
+        patients = Patients.objects.create(
+            user=self.user,
+            first_name='Green Eggs on Toast',
+            last_name='Sample patients last name',
+            age=5,
+            med_list='samole med list',
+            phone_number='+12345678',
+            date_of_birth='2006-08-21',
+            street_address="sample address",
+            city_address="sample city",
+            zipcode_address="sample zip",
+            state_address="sample state",
+            creation_date='2006-08-21',
+            modified_date='2006-08-22',
+            description='Sample receipe description.',
+            gender='Male',
+            emergency_contact_name='Sample contact name',
+            emergency_phone_number='+12345678',
+            relationship='Father',
+            is_in_hospital=True,
+        )
+        patients.tags.add(tag1)
+
+        res = self.client.get(TAGS_URL, {'assigned_only': 1})
+
+        s1 = TagSerializer(tag1)
+        s2 = TagSerializer(tag2)
+        self.assertIn(s1.data, res.data)
+        self.assertNotIn(s2.data, res.data)
+
+    def test_filtered_tags_unique(self):
+        """Test filtered tags returns a unique list."""
+        tag = Tag.objects.create(user=self.user, name='Breakfast')
+        Tag.objects.create(user=self.user, name='Dinner')
+        patients1 = Patients.objects.create(
+            user=self.user,
+            first_name='Pancakes',
+            last_name='Sample patients last name',
+            age=5,
+            med_list='samole med list',
+            phone_number='+12345678',
+            date_of_birth='2006-08-21',
+            street_address="sample address",
+            city_address="sample city",
+            zipcode_address="sample zip",
+            state_address="sample state",
+            creation_date='2006-08-21',
+            modified_date='2006-08-22',
+            description='Sample receipe description.',
+            gender='Male',
+            emergency_contact_name='Sample contact name',
+            emergency_phone_number='+12345678',
+            relationship='Father',
+            is_in_hospital=True,
+        )
+        patients2 = Patients.objects.create(
+            user=self.user,
+            first_name='Porridge',
+            last_name='Sample patients last name',
+            age=5,
+            med_list='samole med list',
+            phone_number='+12345678',
+            date_of_birth='2006-08-21',
+            street_address="sample address",
+            city_address="sample city",
+            zipcode_address="sample zip",
+            state_address="sample state",
+            creation_date='2006-08-21',
+            modified_date='2006-08-22',
+            description='Sample receipe description.',
+            gender='Male',
+            emergency_contact_name='Sample contact name',
+            emergency_phone_number='+12345678',
+            relationship='Father',
+            is_in_hospital=True,
+        )
+        patients1.tags.add(tag)
+        patients2.tags.add(tag)
+
+        res = self.client.get(TAGS_URL, {'assigned_only': 1})
+
+        self.assertEqual(len(res.data), 1)

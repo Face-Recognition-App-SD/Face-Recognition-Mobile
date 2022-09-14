@@ -8,7 +8,10 @@ from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIClient
 
-from core.models import Treatment
+from core.models import (
+    Treatment,
+    Patients,
+)
 
 from patients.serializers import TreatmentSerializer
 
@@ -94,3 +97,95 @@ class PrivateTreatmentApiTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
         treatments = Treatment.objects.filter(user=self.user)
         self.assertFalse(treatments.exists())
+
+    def test_filter_treatment_assigned_to_patients(self):
+        """Test listing tratments to those assigned to patients."""
+        in1 = Treatment.objects.create(user=self.user, name='Apples')
+        in2 = Treatment.objects.create(user=self.user, name='Turkey')
+        patients = Patients.objects.create(
+            # title='Apple Crumble',
+            # time_minutes=5,
+            # price=Decimal('4.50'),
+            # user=self.user,
+            user=self.user,
+            first_name='Sample Apples name',
+            last_name='Sample patients last name',
+            age=5,
+            med_list='samole med list',
+            phone_number='+12345678',
+            date_of_birth='2006-08-21',
+            street_address="sample address",
+            city_address="sample city",
+            zipcode_address="sample zip",
+            state_address="sample state",
+            creation_date='2006-08-21',
+            modified_date='2006-08-22',
+            description='Sample receipe description.',
+            gender='Male',
+            emergency_contact_name='Sample contact name',
+            emergency_phone_number='+12345678',
+            relationship='Father',
+            is_in_hospital=True,
+        )
+
+        patients.treatment.add(in1)
+
+        res = self.client.get(TREATMENTS_URL, {'assigned_only': 1})
+
+        s1 = TreatmentSerializer(in1)
+        s2 = TreatmentSerializer(in2)
+        self.assertIn(s1.data, res.data)
+        self.assertNotIn(s2.data, res.data)
+
+    def test_filtered_treatment_unique(self):
+        """Test filtered treatmentreturns a unique list."""
+        ing = Treatment.objects.create(user=self.user, name='Eggs')
+        Treatment.objects.create(user=self.user, name='Lentils')
+        patients1 = Patients.objects.create(
+            user=self.user,
+            first_name='Sample Eggs name',
+            last_name='Sample patients last name',
+            age=5,
+            med_list='samole med list',
+            phone_number='+12345678',
+            date_of_birth='2006-08-21',
+            street_address="sample address",
+            city_address="sample city",
+            zipcode_address="sample zip",
+            state_address="sample state",
+            creation_date='2006-08-21',
+            modified_date='2006-08-22',
+            description='Sample receipe description.',
+            gender='Male',
+            emergency_contact_name='Sample contact name',
+            emergency_phone_number='+12345678',
+            relationship='Father',
+            is_in_hospital=True,
+        )
+        patients2 = Patients.objects.create(
+            user=self.user,
+            first_name='Samples of Eggs name',
+            last_name='Sample patients last name',
+            age=5,
+            med_list='samole med list',
+            phone_number='+12345678',
+            date_of_birth='2006-08-21',
+            street_address="sample address",
+            city_address="sample city",
+            zipcode_address="sample zip",
+            state_address="sample state",
+            creation_date='2006-08-21',
+            modified_date='2006-08-22',
+            description='Sample receipe description.',
+            gender='Male',
+            emergency_contact_name='Sample contact name',
+            emergency_phone_number='+12345678',
+            relationship='Father',
+            is_in_hospital=True,
+        )
+        patients1.treatment.add(ing)
+        patients2.treatment.add(ing)
+
+        res = self.client.get(TREATMENTS_URL, {'assigned_only': 1})
+
+        self.assertEqual(len(res.data), 1)
