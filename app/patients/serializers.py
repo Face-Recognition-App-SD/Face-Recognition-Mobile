@@ -68,7 +68,7 @@ class PatientsDetailSerializer(PatientsSerializer):
     """Serializer for Patients detail view."""
 
     class Meta(PatientsSerializer.Meta):
-        fields = PatientsSerializer.Meta.fields + ['description']
+        fields = PatientsSerializer.Meta.fields + ['description', 'image']
 
     def _get_or_create_tags(self, tags, patients):
         """Handle getting or creating tags as needed."""

@@ -447,6 +447,47 @@ class PrivatePatientsApiTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(patients.treatment.count(), 0)
 
+    def test_filter_by_tags(self):
+        """Test filtering patients by tags."""
+        r1 = create_patients(user=self.user, first_name='Thai Vegetable Curry')
+        r2 = create_patients(user=self.user,
+                             first_name='Aubergine with Tahini')
+        tag1 = Tag.objects.create(user=self.user, name='Vegan')
+        tag2 = Tag.objects.create(user=self.user, name='Vegetarian')
+        r1.tags.add(tag1)
+        r2.tags.add(tag2)
+        r3 = create_patients(user=self.user, first_name='Fish and chips')
+
+        params = {'tags': f'{tag1.id},{tag2.id}'}
+        res = self.client.get(PATIENTS_URL, params)
+
+        s1 = PatientsSerializer(r1)
+        s2 = PatientsSerializer(r2)
+        s3 = PatientsSerializer(r3)
+        self.assertIn(s1.data, res.data)
+        self.assertIn(s2.data, res.data)
+        self.assertNotIn(s3.data, res.data)
+
+    def test_filter_by_treatment(self):
+        """Test filtering patients by treatment."""
+        r1 = create_patients(user=self.user, first_name='Posh Beans on Toast')
+        r2 = create_patients(user=self.user, first_name='Chicken Cacciatore')
+        in1 = Treatment.objects.create(user=self.user, name='Feta Cheese')
+        in2 = Treatment.objects.create(user=self.user, name='Chicken')
+        r1.treatment.add(in1)
+        r2.treatment.add(in2)
+        r3 = create_patients(user=self.user, first_name='Red Lentil Daal')
+
+        params = {'treatment': f'{in1.id},{in2.id}'}
+        res = self.client.get(PATIENTS_URL, params)
+
+        s1 = PatientsSerializer(r1)
+        s2 = PatientsSerializer(r2)
+        s3 = PatientsSerializer(r3)
+        self.assertIn(s1.data, res.data)
+        self.assertIn(s2.data, res.data)
+        self.assertNotIn(s3.data, res.data)
+
 
 class ImageUploadTests(TestCase):
     """Tests for the image upload API."""
