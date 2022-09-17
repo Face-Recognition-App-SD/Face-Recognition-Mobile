@@ -16,23 +16,25 @@ services:
              python manage.py migrate &&
              python manage.py runserver 0.0.0.0:8000"
     environment:
-      ENGINE=django.db.backends.mysql
-      NAME=Rostro_DB
-      USER=rostro_test
-      PASSWORD=9vxL4_0pCa.58
-      HOST=db-rostro-mysql.cvd6cndsisc1.us-east-1.rds.amazonaws.com
-      PORT=3306
+      - ENGINE=django.db.backends.mysql
+      - NAME=Rostro_DB
+      - USER=rostro_test
+      - PASSWORD=9vxL4_0pCa.58
+      - HOST=db-rostro-mysql.cvd6cndsisc1.us-east-1.rds.amazonaws.com
+      - PORT=3306
     depends_on:
       - db
 
   db:
     #image: postgres:13-alpine
+    build:
+      context: .
     volumes:
-      - dev-db-data:/var/lib/postgresql/data
+      - dev-db-data:/var/lib/mysql
     environment:
-      - POSTGRES_DB=devdb
-      - POSTGRES_USER=devuser
-      - POSTGRES_PASSWORD=changeme
+      - MYSQL_DB=Rostro_DB
+      - MYSQL_USER=rostro_test
+      - MYSQL_PASSWORD=9vxL4_0pCa.58
 
 volumes:
   dev-db-data:
