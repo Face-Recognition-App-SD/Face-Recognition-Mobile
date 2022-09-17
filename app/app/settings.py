@@ -93,7 +93,7 @@ DATABASES = {
         'PASSWORD': os.environ.get('PASSWORD'),
         'HOST': os.environ.get('HOST'),
         'PORT': os.environ.get('PORT'),
-        'OPTIONS': {'ssl': {'ca':r'Facial_Recognition_Mobile\us-east-1-bundle.pem'}},
+        'OPTIONS': {'ssl': {'ca':r'app\app\global-bundle.pem'}},
     }
 }
 
