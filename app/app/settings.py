@@ -93,7 +93,10 @@ DATABASES = {
         'PASSWORD': os.environ.get('PASSWORD'),
         'HOST': os.environ.get('HOST'),
         'PORT': os.environ.get('PORT'),
-        'OPTIONS': {'ssl': {'ca':r'app\app\global-bundle.pem'}},
+        'OPTIONS': {'ssl': {'ca':r'global-bundle.pem'}},
+        'TEST': {
+            'NAME': 'test_Rostro_DB',
+        },
     }
 }
 
